@@ -1,11 +1,25 @@
 import dotenv from "dotenv";
 import path from "path";
 import type { InitOptions } from "payload/config";
-import payload from "payload";
+import payload, { Payload } from "payload";
+import nodemailer from "nodemailer";
 
 dotenv.config({
-    path: path.resolve(__dirname, "../.env")
-})
+    path: path.resolve(__dirname, "../.env"),
+});
+
+const transporter = nodemailer.createTransport({
+    host: "smtp.resend.com",
+    secure: true,
+    port: 465,
+    auth: {
+        user: "resend",
+        pass: process.env.RESEND_API_KEY,
+    },
+    tls: {
+        rejectUnauthorized: false,
+    },
+});
 
 let cached = (global as any).payload;
 
@@ -13,24 +27,31 @@ if (!cached) {
     cached = (global as any).payload = {
         client: null,
         promise: null,
-    }
+    };
 }
 
 interface Args {
-    initOptions?: Partial<InitOptions>
+    initOptions?: Partial<InitOptions>;
 }
 
-export const getPayloadClient = async ({initOptions}: Args = {}) => {
+export const getPayloadClient = async ({
+    initOptions,
+}: Args = {}): Promise<Payload> => {
     if (!process.env.PAYLOAD_SECRET) {
-        throw new Error(`We dont have a secret key`)
+        throw new Error(`We dont have a secret key`);
     }
 
     if (cached.client) {
         return cached.client;
-    } 
+    }
 
     if (!cached.promise) {
-        cached.promise= payload.init({
+        cached.promise = payload.init({
+            email: {
+                transport: transporter,
+                fromAddress: "onboarding@resend.dev",
+                fromName: "DigitalHippo",
+            },
             secret: process.env.PAYLOAD_SECRET || "",
             local: initOptions?.express ? false : true,
             ...(initOptions || {}),
@@ -45,4 +66,4 @@ export const getPayloadClient = async ({initOptions}: Args = {}) => {
     }
 
     return cached.client;
-}
+};
