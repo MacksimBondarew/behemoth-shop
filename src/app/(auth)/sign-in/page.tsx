@@ -15,7 +15,6 @@ import {
 } from "@/lib/validators/account-credentials-validator";
 import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
-import { ZodError } from "zod";
 import { useRouter, useSearchParams } from "next/navigation";
 
 const Page = () => {
@@ -43,19 +42,18 @@ const Page = () => {
         onSuccess: () => {
             toast.success("Signed in successfully");
 
-            router.refresh;
+            const getRedirectPath = () => {
+                if (origin) return `/${origin}`;
+                if (isSeller) return "/sell";
+                return "/";
+            };
 
-            if (origin) {
-                router.push(`/${origin}`);
-                return;
-            }
-
-            if (isSeller) {
-                router.push("/sell");
-                return;
-            }
-
-            router.push("/");
+            const redirect = () => {
+                const path = getRedirectPath();
+                router.push(path);
+                router.refresh();
+            };
+            redirect();
         },
         onError: (err) => {
             if (err.data?.code === "UNAUTHORIZED") {
