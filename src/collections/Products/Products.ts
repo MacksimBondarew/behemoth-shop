@@ -112,7 +112,7 @@ export const Products: CollectionConfig = {
             required: true,
             labels: {
                 singular: "Image",
-                plural: "Images"
+                plural: "Images",
             },
             fields: [
                 {
@@ -120,8 +120,8 @@ export const Products: CollectionConfig = {
                     type: "upload",
                     relationTo: "media",
                     required: true,
-                }
-            ]
-        }
+                },
+            ],
+        },
     ],
 };

@@ -4,6 +4,7 @@ import { Product } from "@/payload-types";
 import { TQueryValidator } from "../lib/validators/QueryValidator";
 import { trpc } from "@/trpc/client";
 import Link from "next/link";
+import ProductListing from "./ProductListing";
 interface ProductReelProps {
     title: string;
     subtitle?: string;
@@ -62,9 +63,13 @@ const ProductReel = ({ title, subtitle, href, query }: ProductReelProps) => {
             <div className="relative">
                 <div className="mt-6 flex items-center w-full">
                     <div className="w-full grid  grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 md:gap-y-10 lg:gap-x-8">
-                        {map.map((product, index) => {
-                            <ProductListing />;
-                        })}
+                        {map.map((product, index) => (
+                            <ProductListing
+                                key={index}
+                                product={product}
+                                index={index}
+                            />
+                        ))}
                     </div>
                 </div>
             </div>
