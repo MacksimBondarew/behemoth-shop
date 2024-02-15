@@ -41,6 +41,7 @@ export const Products: CollectionConfig = {
             name: "category",
             label: "Category",
             type: "select",
+            required: true,
             options: PRODUCT_CATEGORIES.map(({ label, value }) => ({
                 label,
                 value,
