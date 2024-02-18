@@ -43,22 +43,23 @@ export const paymentRouter = router({
                 },
             });
 
-            const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
+            const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] =
+                [];
 
             filterProducts.forEach((product) => {
                 line_items.push({
                     price: product.priceId!,
-                    quantity: 1
-                })
-            })
+                    quantity: 1,
+                });
+            });
 
             line_items.push({
                 price: "price_1Ol7pnGb0uW8k79zKS7r4dqP",
                 quantity: 1,
                 adjustable_quantity: {
                     enabled: false,
-                }
-            })
+                },
+            });
 
             try {
                 const stripeSession = await stripe.checkout.sessions.create({
@@ -68,18 +69,39 @@ export const paymentRouter = router({
                     mode: "payment",
                     metadata: {
                         userId: user.id,
-                        orderId: order.id
-                    }, 
+                        orderId: order.id,
+                    },
                     line_items,
                 });
 
                 return {
                     url: stripeSession.url,
-                }
+                };
             } catch (err) {
                 console.log(err);
 
-                return { url: null }
+                return { url: null };
             }
+        }),
+    pullOrderStatus: privateProcedure
+        .input(z.object({ orderId: z.string() }))
+        .query(async ({ input }) => {
+            const { orderId } = input;
+
+            const payload = await getPayloadClient();
+            const { docs: orders } = await payload.find({
+                collection: "orders",
+                where: {
+                    id: {
+                        equals: orderId,
+                    },
+                },
+            });
+            if (!orders.length) {
+                throw new TRPCError({ code: "NOT_FOUND" });
+            }
+            const [order] = orders;
+
+            return { isPaid: order._isPaid };
         }),
 });
