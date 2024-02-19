@@ -34,6 +34,15 @@ const start = async () => {
 
     app.post("/api/webhooks/stripe", webhookMiddleware, stripeWebhookHandler);
 
+    const payload = await getPayloadClient({
+        initOptions: {
+            express: app,
+            onInit: async (cms) => {
+                cms.logger.info(`Admin URL ${cms.getAdminURL()} `);
+            },
+        },
+    });
+
     if (process.env.NEXT_BUILD) {
         app.listen(PORT, async () => {
             payload.logger.info("Next.js is building for prduction");
@@ -43,15 +52,6 @@ const start = async () => {
         })
         return
     }
-
-    const payload = await getPayloadClient({
-        initOptions: {
-            express: app,
-            onInit: async (cms) => {
-                cms.logger.info(`Admin URL ${cms.getAdminURL()} `);
-            },
-        },
-    });
 
     app.use(
         "/api/trpc",
