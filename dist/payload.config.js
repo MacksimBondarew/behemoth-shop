@@ -39,7 +39,7 @@ exports.default = (0, config_1.buildConfig)({
     db: (0, db_mongodb_1.mongooseAdapter)({
         url: process.env.MONGODB_URL,
     }),
-    typescript: {
-        outputFile: path_1.default.resolve(__dirname, "payload-types.ts")
-    }
+    // typescript: {
+    //     outputFile: path.resolve(__dirname, "payload-types.ts")
+    // }
 });
