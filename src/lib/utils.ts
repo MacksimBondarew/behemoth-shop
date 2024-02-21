@@ -28,7 +28,7 @@ export function constructMetadata({
   title = 'Behemoth-Shop - the marketplace for digital assets',
   description = 'Behemoth-Shop is an open-source marketplace for high-quality digital goods.',
   image = '/thumbnail.png',
-  icons = '/favicon.ico',
+  icons = `./public/favicon.ico`,
   noIndex = false,
 }: {
   title?: string
