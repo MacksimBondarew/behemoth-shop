@@ -1,3 +1,5 @@
+# Behemoth-Shop
+
 Behemoth-Shop is a modern fullstack e-commerce marketplace designed specifically for digital products. Leveraging the power of Next.js 14 App Router, tRPC, TypeScript, Payload, and Tailwind, this platform provides a seamless and efficient experience for both buyers and sellers.
 
 ## Features
