@@ -12,6 +12,8 @@ import {
     render,
 } from "@react-email/components";
 
+import * as React from "react";
+
 interface EmailTemplateProps {
     actionLabel: string;
     buttonText: string;
@@ -64,8 +66,8 @@ export const EmailTemplate = ({
 };
 
 export const PrimatyActionEmailHtml = (props: EmailTemplateProps) => {
-  return render(<EmailTemplate {...props} />, { pretty: true })
-}
+    return render(<EmailTemplate {...props} />, { pretty: true });
+};
 
 const main = {
     backgroundColor: "#ffffff",
